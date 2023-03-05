@@ -1,0 +1,29 @@
+{
+  "login": [
+    {
+      "id": "lucas",
+      "login": "lucas",
+      "password": "123"
+    },
+    {
+      "usid": "lucas",
+      "password": "123",
+      "id": "7tHdA7E"
+    },
+    {
+      "usid": "1231",
+      "password": "123",
+      "id": "8F016ab"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
