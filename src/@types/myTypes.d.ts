@@ -26,7 +26,10 @@ export interface iPageProps {
 }
 
 export interface iComponent {
-    isMobileDevice: boolean
+    isMobileDevice: boolean,
+    handleSearchbar?: Function<string>,
+    handleSearchStatus?: Function<Number>,
+    searchStatus?: Number
 }
 
 
