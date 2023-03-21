@@ -56,5 +56,5 @@ const MainTalksDiv = styled.div`
 `
 const BodyDiv = styled.div`
     background-color: #ffffff;
-    height: calc(100vh - 4.8rem - 2.5rem - 1.1rem);
+    height: calc(100vh - 4rem - 2.5rem - 1.1rem);
 `
