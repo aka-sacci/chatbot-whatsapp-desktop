@@ -1,4 +1,4 @@
-import { iLoginProps, iLoginResponse } from "../../../@types/myTypes";
+import { iLoginProps, iServiceDefault } from "../../../@types/myTypes";
 import axios from "axios";
 axios.defaults.withCredentials = true
 
@@ -9,7 +9,7 @@ export default async function login(props: iLoginProps): Promise<String> {
         usid,
         password
     }, { withCredentials: true })
-        .then((response: iLoginResponse) => {
+        .then((response: iServiceDefault) => {
             switch (response.status) {
                 case 200:
                     return String(response.data.token)

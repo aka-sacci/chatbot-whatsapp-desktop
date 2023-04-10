@@ -1,6 +1,6 @@
 import { iComponent } from "../../../../@types/myTypes"
 import styled, { ThemeProvider } from "styled-components"
-import { useContext, useEffect, useState, useRef } from "react"
+import { useContext, useEffect, useState, useRef, ChangeEvent } from "react"
 import { AuthContext } from "providers/AuthProvider"
 import { useNavigate } from 'react-router-dom'
 
@@ -10,6 +10,7 @@ export default function Header(props: iComponent) {
     const talkIcon = require('../../../../images/icons/dialogo.png')
     const moreOptionsIcon = require('../../../../images/icons/mais.png')
     const [optionButtonisToggled, setOptionButtonIsToggled] = useState(false)
+    const [checked, setChecked] = useState(true);
     const { onLogout } = useContext(AuthContext)
     const refDiv = useRef<HTMLDivElement>(null);
     const nav = useNavigate()
@@ -22,6 +23,10 @@ export default function Header(props: iComponent) {
         await onLogout()
         nav('/login')
     }
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setChecked(e.target.checked);
+    };
 
     useEffect(() => {
 
@@ -36,6 +41,10 @@ export default function Header(props: iComponent) {
         };
 
     }, [optionButtonisToggled]);
+
+    useEffect(() => {
+        console.log('set session')
+    }, [])
 
     return (
         <>
@@ -52,6 +61,11 @@ export default function Header(props: iComponent) {
                     <ProfilePicDiv>
                         <ProfilePic></ProfilePic>
                     </ProfilePicDiv>
+                    <DivSwitch></DivSwitch>
+                    <LabelSwitch title="">
+                        <InputSwitch checked={checked} type="checkbox" onChange={handleChange} />
+                        <Switch />
+                    </LabelSwitch>
                     <IconsDiv>
                         <TalkIcon
                             title="Nova conversa"></TalkIcon>
@@ -88,7 +102,6 @@ const IconsDiv = styled.div`
     text-align: right;
     flex: 1;
     margin-top: 1.4rem;
-    width: 10%;
 `
 
 const ProfilePic = styled.img`
@@ -149,3 +162,51 @@ const NewOption = styled.div`
         background-color: #f0f2f5;
     }
 `
+const DivSwitch = styled.div`
+    text-align: right;
+    flex: 1;
+    width: fit-content;
+`
+
+const LabelSwitch = styled.label`
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    `
+
+const Switch = styled.div`
+    position: relative;
+    width: 40px;
+    height: 20px;
+    background: #b3b3b3;
+    border-radius: 28px;
+    padding: 4px;
+    transition: 300ms all;
+    
+    &:before {
+        transition: 300ms all;
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 35px;
+        top: 50%;
+        left: 4px;
+        background: white;
+        transform: translate(0, -50%);
+    }
+  `;
+
+const InputSwitch = styled.input`
+    opacity: 0;
+  position: relative;
+
+  &:checked + ${Switch} {
+    background: #4e0096;
+
+    &:before {
+      transform: translate(20px, -50%);
+    }
+  }
+`;
+

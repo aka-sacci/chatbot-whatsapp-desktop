@@ -39,18 +39,23 @@ export interface iLoginProps {
 
 }
 
-export interface iLoginResponse {
+export interface iServiceDefault {
     status: number,
-    data: iLoginResponseData
+    data: iServiceDefaultData
 }
 
-export interface iLoginResponseData {
-    token: string;
+export interface iServiceDefaultData {
+    token?: string,
     error?: Error
 }
 
-interface iAuthProvider {
+
+export interface iAuthProvider {
     isAuthed: () => Promise<boolean>,
     onLogin: (props: iLoginProps) => Promise<void>,
     onLogout: () => Promise<void>
+}
+
+export interface iSetActivityStatusProps {
+    newStatus: number
 }

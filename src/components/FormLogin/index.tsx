@@ -13,6 +13,7 @@ export default function FormLogin(props: iComponent) {
     const [error, setError] = useState<Error>(Error)
     const [errorBool, setErrorBool] = useState<boolean>(false)
     const [isOpened, setIsOpened] = useState(false)
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false)
     const { isMobileDevice } = props
     const nav = useNavigate()
     const { onLogin } = useContext(AuthContext)
@@ -34,6 +35,7 @@ export default function FormLogin(props: iComponent) {
     const submitHandler = async (e: any) => {
         e.preventDefault()
         setErrorBool(false)
+        setIsButtonDisabled(true)
         try {
             await onLogin({ password: inputPassword, usid: inputUsid })
             nav('/chats')
@@ -42,6 +44,7 @@ export default function FormLogin(props: iComponent) {
             setInputPassword("")
             setError(err)
             setErrorBool(true)
+            setIsButtonDisabled(false)
         }
     }
 
@@ -84,7 +87,7 @@ export default function FormLogin(props: iComponent) {
                                 value={inputPassword}
                                 required />
 
-                            <ButtonSubmit type='submit'>Entrar</ButtonSubmit>
+                            <ButtonSubmit type='submit' disabled={isButtonDisabled}>Entrar</ButtonSubmit>
 
                         </form>
                         <ContactAdm>Não tem acesso? Contate o administrador da sua unidade!</ContactAdm>
@@ -190,17 +193,25 @@ const ButtonSubmit = styled.button`
     margin-top: 2rem;
     font-family: 'Roboto Mono', sans-serif;
 
-    opacity: ${props => (props.theme.open ? "0.9" : "0")};
-    transition: opacity 1s;
-    transition-delay: 0.5s;
+
    
     background-color: #4e0096;
     color: white;
     font-size: 1.1rem;
     font-weight: 900;
 
+    
+    :enabled {
+    opacity: ${props => (props.theme.open ? "0.9" : "0")};
+    transition: opacity 1s;
+    transition-delay: 0.5s;
     :hover {
         cursor: pointer;
+    }
+    }
+
+    :disabled {
+        opacity: 0.7;
     }
 `
 
