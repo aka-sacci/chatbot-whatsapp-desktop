@@ -46,7 +46,8 @@ export interface iServiceDefault {
 
 export interface iServiceDefaultData {
     token?: string,
-    error?: Error
+    error?: Error,
+
 }
 
 
@@ -58,4 +59,8 @@ export interface iAuthProvider {
 
 export interface iSetActivityStatusProps {
     newStatus: number
+}
+
+export interface iSessionProvider {
+    setActivityStatus: (props: iSetActivityStatusProps) => Promise<void>
 }

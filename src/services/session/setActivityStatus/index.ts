@@ -1,10 +1,10 @@
-import { iServiceDefault, iSetActivityStatusProps } from "../../../../@types/myTypes";
+import { iServiceDefault, iSetActivityStatusProps } from "../../../@types/myTypes";
 import axios from "axios";
 axios.defaults.withCredentials = true
 
 export default async function setActivityStatus(props: iSetActivityStatusProps): Promise<iServiceDefault> {
     let { newStatus } = props
-    let response = await axios.post('http://localhost:3333/auth/login', {
+    let response = await axios.post('http://localhost:3333/session/sessionactivitysetter', {
         sessionNewStatus: newStatus
     }, { withCredentials: true })
         .then((response: iServiceDefault) => {

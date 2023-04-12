@@ -1,6 +1,7 @@
 import { iComponent } from "../../../../@types/myTypes"
 import styled, { ThemeProvider } from "styled-components"
-import { useContext, useEffect, useState, useRef, ChangeEvent } from "react"
+import { useContext, useEffect, useState, useRef } from "react"
+import { SessionContext } from "providers/SessionProvider"
 import { AuthContext } from "providers/AuthProvider"
 import { useNavigate } from 'react-router-dom'
 
@@ -11,6 +12,7 @@ export default function Header(props: iComponent) {
     const moreOptionsIcon = require('../../../../images/icons/mais.png')
     const [optionButtonisToggled, setOptionButtonIsToggled] = useState(false)
     const [checked, setChecked] = useState(true);
+    const { setActivityStatus } = useContext(SessionContext)
     const { onLogout } = useContext(AuthContext)
     const refDiv = useRef<HTMLDivElement>(null);
     const nav = useNavigate()
@@ -20,12 +22,23 @@ export default function Header(props: iComponent) {
     }
 
     const handleLogout = async () => {
-        await onLogout()
-        nav('/login')
+        try {
+            await onLogout()
+            nav('/login')
+        } catch (err: any) {
+
+        }
     }
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setChecked(e.target.checked);
+
+    const handleChange = async () => {
+        let StatusToBeChanged = checked ? 0 : 1
+        try {
+            await setActivityStatus({ newStatus: StatusToBeChanged })
+            setChecked(!checked);
+        } catch (err: any) {
+            console.log('peis')
+        }
     };
 
     useEffect(() => {
@@ -41,10 +54,6 @@ export default function Header(props: iComponent) {
         };
 
     }, [optionButtonisToggled]);
-
-    useEffect(() => {
-        console.log('set session')
-    }, [])
 
     return (
         <>
@@ -62,7 +71,7 @@ export default function Header(props: iComponent) {
                         <ProfilePic></ProfilePic>
                     </ProfilePicDiv>
                     <DivSwitch></DivSwitch>
-                    <LabelSwitch title="">
+                    <LabelSwitch title={checked ? "Ativo para receber mensagens" : "Inativo para receber mensagens"}>
                         <InputSwitch checked={checked} type="checkbox" onChange={handleChange} />
                         <Switch />
                     </LabelSwitch>
@@ -209,4 +218,3 @@ const InputSwitch = styled.input`
     }
   }
 `;
-
