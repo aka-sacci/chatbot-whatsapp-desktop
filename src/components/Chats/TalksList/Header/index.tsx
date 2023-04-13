@@ -30,14 +30,12 @@ export default function Header(props: iComponent) {
         }
     }
 
-
     const handleChange = async () => {
         let StatusToBeChanged = checked ? 0 : 1
         try {
             await setActivityStatus({ newStatus: StatusToBeChanged })
             setChecked(!checked);
         } catch (err: any) {
-            console.log('peis')
         }
     };
 
@@ -54,6 +52,14 @@ export default function Header(props: iComponent) {
         };
 
     }, [optionButtonisToggled]);
+
+    useEffect(() => {
+        let prevStatus = sessionStorage.getItem('active')
+        //let prevStatusBool = true
+        //prevStatus === "true" ? prevStatusBool = true : prevStatusBool = false 
+        console.log(prevStatus)
+        setChecked(Boolean(prevStatus))
+    }, [])
 
     return (
         <>

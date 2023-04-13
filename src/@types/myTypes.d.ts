@@ -47,7 +47,8 @@ export interface iServiceDefault {
 export interface iServiceDefaultData {
     token?: string,
     error?: Error,
-
+    isSessionActive?: boolean,
+    
 }
 
 
@@ -63,4 +64,5 @@ export interface iSetActivityStatusProps {
 
 export interface iSessionProvider {
     setActivityStatus: (props: iSetActivityStatusProps) => Promise<void>
+    getActivityStatus: () => Promise<boolean>
 }
