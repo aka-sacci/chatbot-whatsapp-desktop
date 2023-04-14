@@ -12,9 +12,11 @@ export default function Header(props: iComponent) {
     const moreOptionsIcon = require('../../../../images/icons/mais.png')
     const [optionButtonisToggled, setOptionButtonIsToggled] = useState(false)
     const [checked, setChecked] = useState(true);
+    const [isCheckDisabled, setIsCheckDisabled] = useState(false)
     const { setActivityStatus, getActivityStatus } = useContext(SessionContext)
     const { onLogout } = useContext(AuthContext)
     const refDiv = useRef<HTMLDivElement>(null);
+    const refImg = useRef<HTMLImageElement>(null);
     const nav = useNavigate()
 
 
@@ -34,8 +36,10 @@ export default function Header(props: iComponent) {
     const handleChange = async () => {
         let StatusToBeChanged = checked ? 0 : 1
         try {
+            setIsCheckDisabled(true)
             await setActivityStatus({ newStatus: StatusToBeChanged })
             setChecked(!checked);
+            setIsCheckDisabled(false)
         } catch {
         }
     };
@@ -52,7 +56,8 @@ export default function Header(props: iComponent) {
     useEffect(() => {
 
         const clickOutsideListener = (event: any) => {
-            if (optionButtonisToggled && refDiv.current && !refDiv.current.contains(event.target)) {
+            if (optionButtonisToggled && refDiv.current && !refDiv.current.contains(event.target) &&
+                refImg.current && !refImg.current.contains(event.target)) {
                 setOptionButtonIsToggled(false)
             }
         }
@@ -67,6 +72,8 @@ export default function Header(props: iComponent) {
         handleGetActivityStatus()
             .then((status: boolean) => {
                 setChecked(status)
+            }).catch(() => {
+                setChecked(false)
             })
     }, [handleGetActivityStatus])
 
@@ -87,13 +94,13 @@ export default function Header(props: iComponent) {
                     </ProfilePicDiv>
                     <DivSwitch></DivSwitch>
                     <LabelSwitch title={checked ? "Ativo para receber mensagens" : "Inativo para receber mensagens"}>
-                        <InputSwitch checked={checked} type="checkbox" onChange={handleChange} />
+                        <InputSwitch checked={checked} type="checkbox" onChange={handleChange} disabled={isCheckDisabled} />
                         <Switch />
                     </LabelSwitch>
                     <IconsDiv>
                         <TalkIcon
                             title="Nova conversa"></TalkIcon>
-                        <MoreOptionsIcon title="Mais opções"
+                        <MoreOptionsIcon title="Mais opções" ref={refImg}
                             onClick={() => handleToggleButton()}
                         ></MoreOptionsIcon>
                     </IconsDiv>
@@ -174,7 +181,7 @@ const OptionsDiv = styled.div`
     visibility: ${props => props.theme.optionButtonisToggled ? 'visible' : 'hidden'};
 
     transform: ${props => (props.theme.optionButtonisToggled ? "scale(1, 1)" : "scale(0.1, 0.5)")};
-    transition: transform 0.2s;
+    transition: all 0.2s;
 
 
 `
@@ -222,14 +229,21 @@ const Switch = styled.div`
   `;
 
 const InputSwitch = styled.input`
-    opacity: 0;
+  opacity: 0;
   position: relative;
 
   &:checked + ${Switch} {
     background: #4e0096;
-
     &:before {
       transform: translate(20px, -50%);
+    }
+  }
+
+  &:disabled + ${Switch} {
+      cursor: wait;
+      background: #765199;
+    &:before {
+      transform: translate(10px, -50%);
     }
   }
 `;
