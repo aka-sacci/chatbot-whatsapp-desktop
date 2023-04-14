@@ -1,6 +1,6 @@
 import { iComponent } from "../../../../@types/myTypes"
 import styled, { ThemeProvider } from "styled-components"
-import { useContext, useEffect, useState, useRef } from "react"
+import { useContext, useEffect, useState, useRef, useCallback } from "react"
 import { SessionContext } from "providers/SessionProvider"
 import { AuthContext } from "providers/AuthProvider"
 import { useNavigate } from 'react-router-dom'
@@ -12,10 +12,11 @@ export default function Header(props: iComponent) {
     const moreOptionsIcon = require('../../../../images/icons/mais.png')
     const [optionButtonisToggled, setOptionButtonIsToggled] = useState(false)
     const [checked, setChecked] = useState(true);
-    const { setActivityStatus } = useContext(SessionContext)
+    const { setActivityStatus, getActivityStatus } = useContext(SessionContext)
     const { onLogout } = useContext(AuthContext)
     const refDiv = useRef<HTMLDivElement>(null);
     const nav = useNavigate()
+
 
     const handleToggleButton = () => {
         setOptionButtonIsToggled(!optionButtonisToggled)
@@ -25,7 +26,7 @@ export default function Header(props: iComponent) {
         try {
             await onLogout()
             nav('/login')
-        } catch (err: any) {
+        } catch {
 
         }
     }
@@ -35,9 +36,18 @@ export default function Header(props: iComponent) {
         try {
             await setActivityStatus({ newStatus: StatusToBeChanged })
             setChecked(!checked);
-        } catch (err: any) {
+        } catch {
         }
     };
+
+    const handleGetActivityStatus = useCallback(async () => {
+        try {
+            let status = await getActivityStatus()
+            return status
+        } catch {
+            return false
+        }
+    }, [getActivityStatus])
 
     useEffect(() => {
 
@@ -54,12 +64,11 @@ export default function Header(props: iComponent) {
     }, [optionButtonisToggled]);
 
     useEffect(() => {
-        let prevStatus = sessionStorage.getItem('active')
-        //let prevStatusBool = true
-        //prevStatus === "true" ? prevStatusBool = true : prevStatusBool = false 
-        console.log(prevStatus)
-        setChecked(Boolean(prevStatus))
-    }, [])
+        handleGetActivityStatus()
+            .then((status: boolean) => {
+                setChecked(status)
+            })
+    }, [handleGetActivityStatus])
 
     return (
         <>

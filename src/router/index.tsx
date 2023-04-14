@@ -3,7 +3,6 @@ import Login from '../pages/Login';
 import { AuthContextProvider } from '../providers/AuthProvider';
 import AuthProtectedRoute from './AuthProtectedRoute';
 import AuthUnprotectedRoute from './AuthUnprotectedRoute';
-import GetActive from './GetActive';
 import checkMobile from '../utils/checkMobile';
 import Chats from 'pages/Chats';
 import { SessionContextProvider } from 'providers/SessionProvider';
@@ -21,9 +20,7 @@ const Router = () => {
                         </AuthUnprotectedRoute>} />
                     <Route path='/chats' element={
                         <AuthProtectedRoute>
-                            <GetActive>
                                 <Chats isMobileDevice={isMobileDevice} />
-                            </GetActive>
                         </AuthProtectedRoute>
                     } />
                     <Route path='*' element={<p>Caminho errado!</p>} />
